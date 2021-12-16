@@ -297,6 +297,26 @@ NS_ASSUME_NONNULL_BEGIN
     return NO;
 }
 
+- (void) startTLSWithIdentity:(nullable SecIdentityRef)identity isServer:(BOOL)isServer
+{
+    NSLog(@"starting TLS");
+    NSDictionary *tlsSettings;
+    if (identity)
+    {
+        NSMutableArray *certs = [NSMutableArray arrayWithCapacity:1];
+        CFMutableArrayRef certificates = (__bridge CFMutableArrayRef)certs;
+        CFArrayAppendValue(certificates, identity);
+        // Cannot use manual trust evaluation on a server socket, as GCDAsyncSocket throws an error that it is not supported. Sigh.
+//        tlsSettings = @{(NSString *)kCFStreamSSLCertificates: certs, GCDAsyncSocketManuallyEvaluateTrust: @YES, (NSString *)kCFStreamSSLIsServer: @(isServer)};
+        tlsSettings = @{(NSString *)kCFStreamSSLCertificates: certs, (NSString *)kCFStreamSSLIsServer: @(isServer)};
+    }
+    else
+    {
+        tlsSettings = @{GCDAsyncSocketManuallyEvaluateTrust: @YES, (NSString *)kCFStreamSSLIsServer: @(isServer)};
+    }
+    [self.tcpSocket startTLS:tlsSettings];
+}
+
 - (void) sendPacket:(F53OSCPacket *)packet
 {
 #if F53_OSC_SOCKET_DEBUG

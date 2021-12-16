@@ -35,7 +35,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define F53_OSC_CLIENT_DEBUG 0
+#define F53_OSC_CLIENT_DEBUG 1
 
 @interface F53OSCClient : NSObject <NSSecureCoding, GCDAsyncSocketDelegate, GCDAsyncUdpSocketDelegate>
 
@@ -56,6 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) disconnect;
 
 - (void) sendPacket:(F53OSCPacket *)packet;
+- (void) startTLSWithIdentity:(nullable SecIdentityRef)identity;
 
 @end
 

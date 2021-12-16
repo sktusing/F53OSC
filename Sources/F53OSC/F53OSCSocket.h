@@ -75,6 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) startListening;
 - (void) stopListening;
+- (void) startTLSWithIdentity:(nullable SecIdentityRef)identity isServer:(BOOL)isServer;
 
 - (BOOL) connect;       // when using TCP, returns NO if already connected
 - (void) disconnect;

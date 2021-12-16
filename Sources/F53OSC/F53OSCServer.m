@@ -199,6 +199,11 @@ NS_ASSUME_NONNULL_BEGIN
     [self.udpSocket.udpSocket synchronouslySetDelegateQueue:nil];
 }
 
+- (void) startTLSWithIdentity:(SecIdentityRef)identity
+{
+    [self.tcpSocket startTLSWithIdentity:identity isServer:YES];
+}
+
 #pragma mark - GCDAsyncSocketDelegate
 
 - (nullable dispatch_queue_t) newSocketQueueForConnectionFromAddress:(NSData *)address onSocket:(GCDAsyncSocket *)sock
@@ -221,8 +226,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self.activeData setObject:[NSMutableData data] forKey:key];
     [self.activeState setObject:[NSMutableDictionary dictionaryWithDictionary:@{ @"socket" : activeSocket,
                                                                                  @"dangling_ESC" : @NO }] forKey:key];
-
-    [newSocket readDataWithTimeout:-1 tag:self.activeIndex];
+// Commented out to allow SSL handshake to happen before reading
+//    [newSocket readDataWithTimeout:-1 tag:self.activeIndex];
 
     self.activeIndex++;
     
@@ -346,6 +351,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) socketDidSecure:(GCDAsyncSocket *)sock
 {
+    NSLog(@"server socketDidSecure");
+    [sock readDataWithTimeout:-1 tag:self.activeIndex];
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL))completionHandler
+{
+    NSLog(@"server didReceiveTrust called");
+    completionHandler(YES);
 }
 
 #pragma mark - GCDAsyncUdpSocketDelegate

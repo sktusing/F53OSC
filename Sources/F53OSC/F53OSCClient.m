@@ -309,6 +309,11 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void) startTLSWithIdentity:(nullable SecIdentityRef)identity
+{
+    [self.socket startTLSWithIdentity:identity isServer:NO];
+}
+
 #pragma mark - GCDAsyncSocketDelegate
 
 - (nullable dispatch_queue_t) newSocketQueueForConnectionFromAddress:(NSData *)address onSocket:(GCDAsyncSocket *)sock
@@ -422,6 +427,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) socketDidSecure:(GCDAsyncSocket *)sock
 {
+    NSLog(@"client socketDidSecure");
+}
+
+- (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL))completionHandler
+{
+    NSLog(@"client didReceiveTrust called");
+    completionHandler(YES);
 }
 
 #pragma mark - GCDAsyncUdpSocketDelegate

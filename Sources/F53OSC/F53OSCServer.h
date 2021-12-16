@@ -32,7 +32,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#define F53_OSC_SERVER_DEBUG 0
+#define F53_OSC_SERVER_DEBUG 1
 
 @interface F53OSCServer : NSObject <GCDAsyncSocketDelegate, GCDAsyncUdpSocketDelegate>
 
@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) startListening;
 - (void) stopListening;
+- (void) startTLSWithIdentity:(SecIdentityRef)identity;
 
 @end
 
