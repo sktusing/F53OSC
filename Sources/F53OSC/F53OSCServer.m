@@ -201,7 +201,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) startTLSWithIdentity:(SecIdentityRef)identity
 {
-    [self.tcpSocket startTLSWithIdentity:identity isServer:YES];
+    [self.tcpSocket startTLSWithIdentity:identity isServer:NO];
 }
 
 #pragma mark - GCDAsyncSocketDelegate
