@@ -359,7 +359,24 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL))completionHandler
 {
     NSLog(@"server didReceiveTrust called");
-    completionHandler(YES);
+    if ( [self.delegate respondsToSelector:@selector(server:shouldTrust:fromSocket:)] )
+    {
+        F53OSCSocket *socket = nil;
+        for ( F53OSCSocket *aSocket in [self.activeTcpSockets allValues] )
+        {
+            if ( aSocket.tcpSocket == sock )
+            {
+                socket = aSocket;
+                break;
+            }
+        }
+        BOOL shouldTrust = [self.delegate server:self shouldTrust:trust fromSocket:socket];
+        completionHandler(shouldTrust);
+    }
+    else
+    {
+        completionHandler(NO);
+    }
 }
 
 #pragma mark - GCDAsyncUdpSocketDelegate

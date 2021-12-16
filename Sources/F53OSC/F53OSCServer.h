@@ -59,6 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 - (void)serverDidConnect:(F53OSCServer *)server toSocket:(F53OSCSocket *)socket;
 - (void)serverDidDisconnect:(F53OSCServer *)server fromSocket:(F53OSCSocket *)socket;
+- (BOOL)server:(F53OSCServer *)server shouldTrust:(SecTrustRef)trust fromSocket:(F53OSCSocket *)socket;
 
 @end
 
