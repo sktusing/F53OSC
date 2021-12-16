@@ -228,8 +228,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                  @"dangling_ESC" : @NO }] forKey:key];
 // Commented out to allow SSL handshake to happen before reading
 //    [newSocket readDataWithTimeout:-1 tag:self.activeIndex];
-
-    self.activeIndex++;
+//
+//    self.activeIndex++;
     
     if ( [self.delegate respondsToSelector:@selector(serverDidConnect:toSocket:)] )
     {
@@ -353,6 +353,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSLog(@"server socketDidSecure");
     [sock readDataWithTimeout:-1 tag:self.activeIndex];
+    self.activeIndex++;
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReceiveTrust:(SecTrustRef)trust completionHandler:(void (^)(BOOL))completionHandler
